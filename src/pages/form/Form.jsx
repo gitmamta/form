@@ -1,102 +1,40 @@
-import React, { useState } from "react";
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  // Basic field check
+  const isEmpty = Object.values(formData).some((value) => value.trim() === "");
+  if (isEmpty) {
+    alert("Please fill in all fields.");
+    return;
+  }
 
-import { useNavigate } from "react-router-dom";
-import "./form.css"
+  try {
+    const response = await fetch("https://form-backend-ysvv.onrender.com/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
 
-export default function Form(){
-  
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    street: "",
-    city: "",
-    pincode: "",
-    state: "",
-    country: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Basic field check
-    const isEmpty = Object.values(formData).some((value) => value.trim() === "");
-    if (isEmpty) {
-      alert("Please fill in all fields.");
-      return;
+    if (!response.ok) {
+      throw new Error("Failed to submit form");
     }
 
-  
-  };
-
-  return (
-    <>
-    <div className="containerr">
-      <h2 className="heading">Shipping Address</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="street"
-          placeholder="Street Address"
-          value={formData.street}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          value={formData.city}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="pincode"
-          placeholder="Pincode"
-          value={formData.pincode}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="state"
-          placeholder="State"
-          value={formData.state}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="country"
-          placeholder="Country"
-          value={formData.country}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <button type="submit" className="button">
-          submit
-        </button>
-      </form>
-    </div>
-    </>
-  );
+    const data = await response.json();
+    alert("Form submitted successfully!");
+    // Optionally, navigate or clear form here
+    // navigate("/success"); // if using useNavigate from react-router-dom
+    setFormData({
+      name: "",
+      street: "",
+      city: "",
+      pincode: "",
+      state: "",
+      country: "",
+    });
+  } catch (error) {
+    console.error(error);
+    alert("Error submitting the form");
+  }
 };
-
-
-
-
