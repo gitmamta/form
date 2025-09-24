@@ -1,0 +1,19 @@
+.navContainer{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-top:20px;
+
+
+}
+.navlinks{
+    display:flex;
+    gap:40px;
+    list-style-type:none;
+
+}
+.navlinks a{
+    text-decoration: none;
+    font-size:1.3rem;
+    color:inherit;
+}

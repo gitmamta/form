@@ -3,7 +3,7 @@ import Form from './pages/form/Form';
 
 function App() {
   return (
-    <div className="App">
+    <div className="container">
       <h1>User Form</h1>
       <Form/>
     </div>
@@ -11,3 +11,7 @@ function App() {
 }
 
 export default App;
+
+
+// npm install -g json-server
+// json-server --watch db.json --port 3001

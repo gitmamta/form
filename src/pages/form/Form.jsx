@@ -1,114 +1,133 @@
-import React, { useState } from "react";
+import { signin } from "../../schema/index.jsx";
+import api from "../../api/api.jsx";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useFormik } from "formik";
+import "./form.css";
+// import { useNavigate } from "react-router-dom";
+
+let initialValue = {
+  name: "",
+  email: "",
+  phoneNo: "",
+  age: "",
+  message: "",
+};
 
 export default function Form() {
-  const [formData, setFormData] = useState({
-    name: "",
-    street: "",
-    city: "",
-    pincode: "",
-    state: "",
-    country: "",
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(false);
+ 
+  const navigate = useNavigate();
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    handleReset,
+    values,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: initialValue,
+    onSubmit: submitHandler,
+    validationSchema: signin,
   });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Validate all fields are filled
-    const isEmpty = Object.values(formData).some((value) => value.trim() === "");
-    if (isEmpty) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
+  async function submitHandler() {
     try {
-      // Replace this with your actual Render backend URL and route
-      const response = await fetch("https://form-backend-ysvv.onrender.com/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Failed to submit form");
-
-      alert("Form submitted successfully!");
-
-      // Clear form after successful submission
-      setFormData({
-        name: "",
-        street: "",
-        city: "",
-        pincode: "",
-        state: "",
-        country: "",
-      });
+      setStatus(true);
+      const response = await api.post("/users", values);
+      console.log(values);
+      handleReset();
+      setStatus(false);
+      navigate("/");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Error submitting the form");
+      console.log(error);
     }
-  };
-
+  }
   return (
-    <div className="containerr">
-      <h2 className="heading">Shipping Address</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="street"
-          placeholder="Street Address"
-          value={formData.street}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          value={formData.city}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="pincode"
-          placeholder="Pincode"
-          value={formData.pincode}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="state"
-          placeholder="State"
-          value={formData.state}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <input
-          type="text"
-          name="country"
-          placeholder="Country"
-          value={formData.country}
-          onChange={handleChange}
-          className="inputt"
-        />
-        <button type="submit" className="button">
-          Submit
-        </button>
+    <>
+      <form onSubmit={handleSubmit} className="card">
+        <div className="d-flex flex-column gap-3 card-body">
+          <h1 className="text-center">Add Users</h1>
+
+
+          <input
+            type="text"
+            placeholder="Enter your name"
+            id="name"
+            name="name"
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="form-control"
+          />
+          {errors.name && touched.name && (
+            <span className="text-danger">{errors.name}</span>
+          )}
+
+          <input
+            type="email"
+            placeholder="Enter your email"
+            id="email"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="form-control"
+          />
+          {errors.email && touched.email && (
+            <span className="text-danger">{errors.email}</span>
+          )}
+
+          <input
+            type="number"
+            placeholder="Enter your phoneNo"
+            id="phoneNo"
+            name="phoneNo"
+            value={values.phoneNo}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="form-control"
+          />
+          {errors.phoneNo && touched.phoneNo && (
+            <span className="text-danger">{errors.phoneNo}</span>
+          )}
+
+          <input
+            type="number"
+            placeholder="Enter your age"
+            id="age"
+            name="age"
+            value={values.age}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="form-control"
+          />
+          {errors.phoneNo && touched.age && (
+            <span className="text-danger">{errors.age}</span>
+          )}
+
+          <textarea
+            name="message"
+            id="message"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            placeholder="Enter message"
+            className="form-control"
+            rows="10"
+            cols="30"
+            style={{ resize: "none" }}
+          ></textarea>
+          {errors.message && touched.message && (
+            <span className="text-danger">{errors.message}</span>
+          )}
+
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+          {/* <p className="login-para">Already have an account? Login here</p> */}
+        </div>
       </form>
-    </div>
+    </>
   );
 }
