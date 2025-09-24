@@ -17,7 +17,7 @@ let initialValue = {
 export default function Form() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(false);
- 
+
   const navigate = useNavigate();
   const {
     handleChange,
@@ -49,7 +49,6 @@ export default function Form() {
       <form onSubmit={handleSubmit} className="card">
         <div className="d-flex flex-column gap-3 card-body">
           <h1 className="text-center">Add Users</h1>
-
 
           <input
             type="text"
@@ -125,7 +124,6 @@ export default function Form() {
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
-          {/* <p className="login-para">Already have an account? Login here</p> */}
         </div>
       </form>
     </>
