@@ -3,8 +3,10 @@ import Navbar from "../navbar/Navbar";
 export default function Layout() {
   return (
     <>
+    <div class="container">
       <Navbar />
       <Outlet />
+      </div>
     </>
   );
 }

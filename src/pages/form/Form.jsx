@@ -113,10 +113,13 @@ export default function Form() {
             onBlur={handleBlur}
             placeholder="Enter message"
             className="form-control"
-            rows="10"
+            rows="4"
             cols="30"
             style={{ resize: "none" }}
           ></textarea>
+          {
+            values.message.length >0 && <span className="text-success">Number of words {values.message.length}</span>
+          }
           {errors.message && touched.message && (
             <span className="text-danger">{errors.message}</span>
           )}
